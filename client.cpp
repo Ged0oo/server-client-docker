@@ -27,32 +27,18 @@ int main() {
     }
     std::memcpy(&serverAddr.sin_addr.s_addr, server->h_addr, server->h_length);
 
-    for (int i = 0; i < 10; i++) {
-        if (connect(sock, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) == 0) {
-            std::cout << "Connected to server!\n";
+    if (connect(sock, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) == 0) {
+        std::cout << "Connected to server!\n";
 
-            std::string msg;
-            char buffer[1024];
-
-            while (true) {
-                std::cout << "Enter message: ";
-                std::getline(std::cin, msg);
-
-                send(sock, msg.c_str(), msg.size(), 0);
-
-                if (msg == "exit") break;
-
-                int bytes_received = recv(sock, buffer, sizeof(buffer) - 1, 0);
-                if (bytes_received <= 0) break;
-
-                buffer[bytes_received] = '\0';
-                std::cout << "Server: " << buffer << std::endl;
-            }
-
-            break;
+        // Send automatic messages every 2 seconds
+        for (int i = 1; i <= 5; i++) {
+            std::string message = "Hello " + std::to_string(i);
+            send(sock, message.c_str(), message.length(), 0);
+            std::cout << "Sent: " << message << std::endl;
+            sleep(2);
         }
-        std::cerr << "Connection failed. Retrying...\n";
-        sleep(2);
+    } else {
+        std::cerr << "Connection failed\n";
     }
 
     close(sock);

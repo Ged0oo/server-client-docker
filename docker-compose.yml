@@ -8,6 +8,8 @@ services:
       - app_network
 
   client:
+    stdin_open: true
+    tty: true
     build: 
       context: .
       dockerfile: Dockerfile.client
