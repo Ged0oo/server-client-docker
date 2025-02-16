@@ -1,0 +1,8 @@
+FROM ubuntu:latest
+RUN apt update && apt install -y g++
+
+WORKDIR /app
+COPY server.cpp socket_utils.cpp socket_utils.h .
+RUN g++ server.cpp socket_utils.cpp -o server -pthread
+
+CMD ["./server"]

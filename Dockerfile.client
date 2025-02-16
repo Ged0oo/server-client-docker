@@ -1,0 +1,8 @@
+FROM ubuntu:latest
+RUN apt update && apt install -y g++
+
+WORKDIR /app
+COPY client.cpp socket_utils.cpp socket_utils.h .
+RUN g++ client.cpp socket_utils.cpp -o client -pthread
+
+CMD ["./client"]
